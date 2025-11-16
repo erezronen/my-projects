@@ -41,7 +41,7 @@ def lesboprn(num,base1): #lossless encryption system based on psudo random numbe
         out.append(level[r])
         key+=r*math.factorial(len(level))
         num1=level
-    print(["".join(base(out,base1,10)),key])
+    print("encrypted:","".join(base(out,base1,10)),"key:",key)
     return ["".join(base(out,base1,2)),"".join(base(str(key),10,2))]
 def int2bytes(i):
     hex_string = '%x' % i
@@ -94,6 +94,11 @@ def decrypt(num_key):
     out=level
     out="".join((base(out,base1,10)))
     return(out)
-text=1023683654762145528664823164825452567425541254523452345253657612102368365476214552866482316482545256742554125452345234525365761210236836547621455286648231648254525674255412545234523452536576121023683654762145528664823164825452567425541254523452345253657612
-t=(activate_lesboprn(str(text),120))
-print(int(decrypt(t))-int(text))
+try:
+    text=int(input("num to incrypt, and be aware that is it is not a number i will choose a number for you"))
+except:
+    text=1023683654762145528664823164825452567425541254523452345253657612102368365476214552866482316482545256742554125452345234525365761210236836547621455286648231648254525674255412545234523452536576121023683654762145528664823164825452567425541254523452345253657612
+lenkey=round(len(str(text))/2.3)
+t=(activate_lesboprn(str(text),lenkey))
+print("inaccuracy:",int(decrypt(t))-int(text))
+input("exit?")
