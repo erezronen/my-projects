@@ -27,9 +27,12 @@ def int2bytes(i):
     hex_string = '%x' % i
     n = len(hex_string)
     return binascii.unhexlify(hex_string.zfill(n + (n & 1)))
-def text_from_bits(bits, encoding='utf-8', errors='surrogatepass'):
-    n = int(bits, 2)
-    return int2bytes(n).decode(encoding, errors)
+def text_from_bits(bits):
+    n=base(bits,2,128)
+    out=""
+    for i in n:
+        out+=chr(int(i))
+    return out
 def text_to_bits(text, encoding='utf-8', errors='surrogatepass'):
     bits = bin(int(binascii.hexlify(text.encode(encoding, errors)), 16))[2:]
     return bits.zfill(8 * ((len(bits) + 7) // 8))
@@ -217,34 +220,23 @@ def huff_compress(text):
     tree=test_tree(tree[0][0])
     print(tree)
     tree[0]="1"+tree[0]
-    final_out="".join(base("2".join(tree)+"2",3,8))
+    final_out="2".join(tree)+"2"
+    final_out="".join(base("".join(base(str(len(final_out)),10,2))+"2"+final_out,3,2))
     print(len(final_out))
-    final_out="1"+"0"*(3700-len(final_out))+final_out
     tree[0]=tree[0][1:]
-    p=0
     for i in range(256):
         if len(tree[i]) != 8:
             print(len(tree[i]))
             print(i)
         final_out+=(tree[i])
-    print(p,"p")
     return final_out
-txt1 = (open("to_condense.txt", "r").read())
+txt1 = text_to_bits(open("to_condense.txt", "r").read())
 i=0
 print(txt1)
-x=lesboprn(txt1,50)
+x=lesboprn(txt1,10)
 print(x,"x")
 txt1= huff_compress(x)
-print(len(txt1))
-if False:
-    while len(txt1)>1000000:
-        i+=1
-        txt1= (huff_compress(txt1))
-        if len(txt1)>len(txt2):
-            txt1=rtir_efficient(txt2,186)
-            print("retry")
-        txt2=txt1
-        print(i)
-        print(len(txt1))
+print((txt1))
+txt1=text_from_bits(txt1)
 txt=open("to_condense.txt","w")
 txt.write(txt1)
